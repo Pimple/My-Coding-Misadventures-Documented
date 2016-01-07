@@ -1,2 +1,2 @@
-# henrikbn.dk
-Projects related to my blog at HenrikBN.dk
+# My Coding Misadventures Documented
+Projects relating to my blog at [HenrikBN.dk](https://www.henrikbn.dk)
