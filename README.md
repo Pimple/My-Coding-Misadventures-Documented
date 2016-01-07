@@ -1,2 +1,3 @@
 # My Coding Misadventures Documented
-Projects relating to my blog at [HenrikBN.dk](http://www.henrikbn.dk)
+
+For more information, see the "[About This Blog And Me](http://henrikbn.dk/about/)" page on my website.
