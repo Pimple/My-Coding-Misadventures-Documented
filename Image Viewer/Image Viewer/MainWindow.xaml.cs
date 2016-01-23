@@ -93,9 +93,7 @@ namespace Image_Viewer
 
         private void zoom_Click(object sender, RoutedEventArgs e)
         {
-            double height = displayImage.ActualHeight;
-            double width = displayImage.ActualWidth;
-            RenderImage(Convert.ToInt16(height), Convert.ToInt16(width));
+            Zoom(100);
         }
     }
 }
