@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Image_Viewer"
         mc:Ignorable="d"
-        Title="Image Viewer" Height="576" Width="1024" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized">
+        Title="Image Viewer" Height="576" Width="1024" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized" SizeChanged="Window_SizeChanged">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -15,7 +15,9 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="0" SnapsToDevicePixels="True" PanningMode="Both">
-            <Canvas Background="#FF101010"/>
+            <Canvas x:Name="imageBackground" Background="#FF101010">
+                <Image x:Name="displayImage" />
+            </Canvas>
         </ScrollViewer>
         <Canvas x:Name="NavBg" Grid.Row="1" Background="#FF333333">
             <Grid Width="{Binding ActualWidth, ElementName=NavBg}" Height="{Binding ActualHeight, ElementName=NavBg}">

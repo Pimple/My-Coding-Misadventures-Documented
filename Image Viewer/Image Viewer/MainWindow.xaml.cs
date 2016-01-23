@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace Image_Viewer
     public partial class MainWindow : Window
     {
         private List<string> images;
+        private int selectedIndex;
         private int zoomValue;
 
         public MainWindow()
@@ -32,7 +34,12 @@ namespace Image_Viewer
         {
             images = new List<string>();
             zoomValue = 100;
+            selectedIndex = -1;
+        }
 
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            BestFit();
         }
 
         private void browse_Click(object sender, RoutedEventArgs e)
@@ -48,32 +55,47 @@ namespace Image_Viewer
 
             if (result.HasValue && result.Value == true)
             {
-                if (dialog.FileNames.Count() > 0)
-                    foreach (string image in dialog.FileNames)
-                        images.Add(image);
+                List<string> newImages = new List<string>();
 
-                // TODO Update view
+                if (dialog.FileNames.Count() > 0)
+                    foreach (string imagePath in dialog.FileNames)
+                        newImages.Add(imagePath);
+
+                this.images = newImages;
+                OpenImage(0);
             }
         }
 
         private void next_Click(object sender, RoutedEventArgs e)
         {
-
+            if (images.Count() <= 0)
+                return;
+            if (selectedIndex >= images.Count() - 1)
+                OpenImage(0);
+            else
+                OpenImage(selectedIndex + 1);
         }
 
         private void last_Click(object sender, RoutedEventArgs e)
         {
-
+            if (images.Count() <= 0)
+                return;
+            if (selectedIndex == 0)
+                OpenImage(images.Count() - 1);
+            else
+                OpenImage(selectedIndex - 1);
         }
 
         private void bestFit_Click(object sender, RoutedEventArgs e)
         {
-
+            BestFit();
         }
 
         private void zoom_Click(object sender, RoutedEventArgs e)
         {
-
+            double height = displayImage.ActualHeight;
+            double width = displayImage.ActualWidth;
+            RenderImage(Convert.ToInt16(height), Convert.ToInt16(width));
         }
     }
 }
