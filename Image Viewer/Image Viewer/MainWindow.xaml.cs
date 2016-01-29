@@ -48,22 +48,24 @@ namespace Image_Viewer
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
 
             dialog.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-            dialog.Multiselect = true;
             dialog.DefaultExt = "Image files (jpg, gif, png)";
             dialog.Filter = "Image files|*.jpg; *.jpeg; *.gif; *.png;";
 
             Nullable<bool> result = dialog.ShowDialog();
 
-            if (result.HasValue && result.Value == true)
+            if (result.Value == true)
             {
-                List<string> newImages = new List<string>();
+                string directory = System.IO.Path.GetDirectoryName(dialog.FileName);
+                images = Directory.EnumerateFiles(directory).Where
+                    (
+                        filename => filename.EndsWith(".jpg")
+                        || filename.EndsWith(".jpeg")
+                        || filename.EndsWith(".gif")
+                        || filename.EndsWith(".png")
+                    )
+                    .ToList<string>();
 
-                if (dialog.FileNames.Count() > 0)
-                    foreach (string imagePath in dialog.FileNames)
-                        newImages.Add(imagePath);
-
-                this.images = newImages;
-                OpenImage(0);
+                OpenImage(images.IndexOf(dialog.FileName));
             }
         }
 

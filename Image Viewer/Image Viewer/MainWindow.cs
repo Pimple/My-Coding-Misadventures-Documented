@@ -11,8 +11,8 @@ namespace Image_Viewer
     {
         private void OpenImage(int index)
         {
+            displayImage.Source = new BitmapImage(new Uri(images[index]));
             selectedIndex = index;
-            displayImage.Source = new BitmapImage(new Uri(images[selectedIndex]));
             BestFit();
         }
 
@@ -21,20 +21,16 @@ namespace Image_Viewer
             BitmapImage image = new BitmapImage(new Uri(images[selectedIndex]));
             double height = image.Height;
             double width = image.Width;
+            
+            double maxHeight = scrollViewer.ActualHeight;
+            double maxWidth = scrollViewer.ActualWidth;
 
-            if (height > 0 || width > 0)
-            {
-                double maxHeight = scrollViewer.ActualHeight;
-                double maxWidth = scrollViewer.ActualWidth;
+            imageBackground.Height = maxHeight;
+            imageBackground.Width = maxWidth;
 
-                imageBackground.Height = maxHeight;
-                imageBackground.Width = maxWidth;
-
-                double scale = Math.Min(maxHeight / height,  maxWidth / width);
-
-                height *= scale;
-                width *= scale;
-            }
+            double scale = Math.Min(maxHeight / height,  maxWidth / width);
+            height *= scale;
+            width *= scale;
 
             RenderImage(image, Convert.ToInt16(height) - 1, Convert.ToInt16(width) - 1);
         }
