@@ -18,23 +18,34 @@ namespace Image_Viewer
 
         private void BestFit()
         {
-            double canvasHeight = imageBackground.ActualHeight;
-            double canvasWidth = imageBackground.ActualWidth;
-            if (displayImage.ActualHeight > 0 && displayImage.ActualHeight < canvasHeight)
-                canvasHeight = displayImage.ActualHeight;
-            if (displayImage.ActualWidth > 0 && displayImage.ActualWidth < canvasWidth)
-                canvasWidth = displayImage.ActualWidth;
-            RenderImage(Convert.ToInt16(canvasHeight), Convert.ToInt16(canvasWidth));
+            BitmapImage image = new BitmapImage(new Uri(images[selectedIndex]));
+            double height = image.Height;
+            double width = image.Width;
+
+            if (height > 0 || width > 0)
+            {
+                double maxHeight = scrollViewer.ActualHeight;
+                double maxWidth = scrollViewer.ActualWidth;
+
+                imageBackground.Height = maxHeight;
+                imageBackground.Width = maxWidth;
+
+                double scale = Math.Min(maxHeight / height,  maxWidth / width);
+
+                height *= scale;
+                width *= scale;
+            }
+
+            RenderImage(image, Convert.ToInt16(height) - 1, Convert.ToInt16(width) - 1);
         }
 
-        private void RenderImage(int height, int width)
+        private void RenderImage(BitmapImage image, int height, int width)
         {
-            if (height > displayImage.Height)
-                imageBackground.Height = height;
-            if (width > displayImage.Width)
-                imageBackground.Width = width;
+            imageBackground.Height = height;
+            imageBackground.Width = width;
             displayImage.Height = height;
             displayImage.Width = width;
+            displayImage.Source = image;
         }
         
         private void Zoom(int percentage)
@@ -44,9 +55,7 @@ namespace Image_Viewer
                 imageBackground.Width = image.Width;
             if (image.Height > imageBackground.Height || double.IsNaN(imageBackground.Height))
                 imageBackground.Height = image.Height;
-            displayImage.Source = new BitmapImage(new Uri(images[selectedIndex]));
-            displayImage.Height = image.Height;
-            displayImage.Width = image.Width;
+            RenderImage(image, Convert.ToInt16(image.Height), Convert.ToInt16(image.Width));
         }
     }
 }

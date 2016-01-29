@@ -14,7 +14,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="0" SnapsToDevicePixels="True" PanningMode="Both">
+        <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="0" SnapsToDevicePixels="True" PanningMode="Both">
             <Grid x:Name="imageBackground">
                 <!-- <Canvas x:Name="imageBackground" Background="#FF101010"> -->
                     <Image x:Name="displayImage" />

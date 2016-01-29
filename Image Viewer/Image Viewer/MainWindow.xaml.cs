@@ -39,7 +39,8 @@ namespace Image_Viewer
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            BestFit();
+            if (images.Count() > 0)
+                BestFit();
         }
 
         private void browse_Click(object sender, RoutedEventArgs e)
