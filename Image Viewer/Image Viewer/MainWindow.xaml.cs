@@ -23,7 +23,7 @@ namespace Image_Viewer
     {
         private List<string> images;
         private int selectedIndex;
-        private int zoomValue;
+        private double zoomValue;
 
         public MainWindow()
         {
@@ -33,8 +33,22 @@ namespace Image_Viewer
         private void Window_Initialized(object sender, EventArgs e)
         {
             images = new List<string>();
-            zoomValue = 100;
+            zoomValue = 1;
             selectedIndex = -1;
+
+            window.MouseWheel += OnMouseWheel;
+            displayImage.MouseWheel += OnMouseWheel;
+            imageBackground.MouseWheel += OnMouseWheel;
+            scrollViewer.MouseWheel += OnMouseWheel;
+            uberGrid.MouseWheel += OnMouseWheel;
+
+            // Navigation methods
+            zoom.Click += OnZoom;
+            bestFit.Click += OnBestFit;
+            previous.Click += OnPrevious;
+            browse.Click += OnBrowse;
+            next.Click += OnNext;
+            exit.Click += OnExit;
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -43,7 +57,7 @@ namespace Image_Viewer
                 BestFit();
         }
 
-        private void browse_Click(object sender, RoutedEventArgs e)
+        private void OnBrowse(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
 
@@ -69,7 +83,7 @@ namespace Image_Viewer
             }
         }
 
-        private void next_Click(object sender, RoutedEventArgs e)
+        private void OnNext(object sender, RoutedEventArgs e)
         {
             if (images.Count() <= 0)
                 return;
@@ -79,7 +93,7 @@ namespace Image_Viewer
                 OpenImage(selectedIndex + 1);
         }
 
-        private void last_Click(object sender, RoutedEventArgs e)
+        private void OnPrevious(object sender, RoutedEventArgs e)
         {
             if (images.Count() <= 0)
                 return;
@@ -89,14 +103,35 @@ namespace Image_Viewer
                 OpenImage(selectedIndex - 1);
         }
 
-        private void bestFit_Click(object sender, RoutedEventArgs e)
+        private void OnBestFit(object sender, RoutedEventArgs e)
         {
             BestFit();
         }
 
-        private void zoom_Click(object sender, RoutedEventArgs e)
+        private void OnZoom(object sender, RoutedEventArgs e)
         {
-            Zoom(100);
+            zoomValue = 1;
+            Zoom(zoomValue);
+        }
+
+        private void OnExit(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void OnMouseWheelIfScrollable(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || !IsImageScrollable())
+                OnMouseWheel(sender, e);
+        }
+
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0)
+                zoomValue *= 1.1;
+            else if (e.Delta < 0)
+                zoomValue *= 0.9;
+            Zoom(zoomValue);
         }
     }
 }

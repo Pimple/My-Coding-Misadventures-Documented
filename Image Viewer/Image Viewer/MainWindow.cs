@@ -33,6 +33,8 @@ namespace Image_Viewer
             width *= scale;
 
             RenderImage(image, Convert.ToInt16(height) - 1, Convert.ToInt16(width) - 1);
+
+            zoomValue = scale;
         }
 
         private void RenderImage(BitmapImage image, int height, int width)
@@ -44,14 +46,24 @@ namespace Image_Viewer
             displayImage.Source = image;
         }
         
-        private void Zoom(int percentage)
+        private void Zoom(double factor)
         {
             BitmapImage image = new BitmapImage(new Uri(images[selectedIndex]));
-            if (image.Width > imageBackground.Width || double.IsNaN(imageBackground.Width))
+            double newWidth = image.Width * factor;
+            double newHeight = image.Height * factor;
+
+            if (newWidth > imageBackground.Width || double.IsNaN(imageBackground.Width))
                 imageBackground.Width = image.Width;
-            if (image.Height > imageBackground.Height || double.IsNaN(imageBackground.Height))
+            if (newHeight > imageBackground.Height || double.IsNaN(imageBackground.Height))
                 imageBackground.Height = image.Height;
-            RenderImage(image, Convert.ToInt16(image.Height), Convert.ToInt16(image.Width));
+
+            RenderImage(image, Convert.ToInt16(newHeight), Convert.ToInt16(newWidth));
+        }
+
+        private bool IsImageScrollable()
+        {
+            return (imageBackground.ActualHeight > scrollViewer.ViewportHeight)
+                || (imageBackground.ActualWidth > scrollViewer.ViewportWidth);
         }
     }
 }
