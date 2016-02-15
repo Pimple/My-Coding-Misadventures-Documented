@@ -40,6 +40,7 @@ namespace Image_Viewer
             displayImage.MouseWheel += OnMouseWheel;
             imageBackground.MouseWheel += OnMouseWheel;
             scrollViewer.MouseWheel += OnMouseWheel;
+            scrollViewer.PreviewMouseWheel += PreventScrollViewerFromIrritatingMe;
             uberGrid.MouseWheel += OnMouseWheel;
 
             // Navigation methods
@@ -132,6 +133,19 @@ namespace Image_Viewer
             else if (e.Delta < 0)
                 zoomValue *= 0.9;
             Zoom(zoomValue);
+        }
+
+        private void PreventScrollViewerFromIrritatingMe(object sender, MouseWheelEventArgs e)
+        {
+            if (displayImage.Source != null && sender is ScrollViewer && !e.Handled)
+            {
+                e.Handled = true;
+                MouseWheelEventArgs eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
+                eventArg.RoutedEvent = UIElement.MouseWheelEvent;
+                eventArg.Source = sender;
+                UIElement parent = ((Control)sender).Parent as UIElement;
+                parent.RaiseEvent(eventArg);
+            }
         }
     }
 }

@@ -32,12 +32,12 @@ namespace Image_Viewer
             height *= scale;
             width *= scale;
 
-            RenderImage(image, Convert.ToInt16(height) - 1, Convert.ToInt16(width) - 1);
+            RenderImage(image, height - 1, width - 1);
 
             zoomValue = scale;
         }
 
-        private void RenderImage(BitmapImage image, int height, int width)
+        private void RenderImage(BitmapImage image, double height, double width)
         {
             imageBackground.Height = height;
             imageBackground.Width = width;
